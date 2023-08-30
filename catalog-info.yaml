@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: soma-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: soma-poi-gateway-app-dev
+    backstage.io/kubernetes-id: soma-poi-gateway-app
+    backstage.io/kubernetes-namespace: soma
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-deploy/soma-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.a1jxqhzp.eastus2.aroapp.io/dev-pipelines/ns/soma/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.a1jxqhzp.eastus2.aroapp.io/k8s/ns/soma/deployments/soma-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.a1jxqhzp.eastus2.aroapp.io/#https://github.com/rhdh-deploy/soma-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "soma"
+  system: workshop-system-soma
+  providesApis:
+    - gateway-api-soma
+  consumesApis:
+    - backend-api-soma
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-soma
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "soma"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-soma
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://soma-poi-gateway-app-soma.apps.a1jxqhzp.eastus2.aroapp.io/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-deploy/soma-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "soma"
+  system: workshop-system-soma
+  definition:
+    $text: https://github.com/rhdh-deploy/soma-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
